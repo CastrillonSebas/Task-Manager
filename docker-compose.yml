@@ -1,11 +1,7 @@
-version: '3.9'
-
 services:
   postgres:
-    image: postgres:16
-
+    image: postgres:16-alpine
     container_name: task-manager-postgres
-
     restart: unless-stopped
 
     environment:
@@ -18,6 +14,54 @@ services:
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: task-manager-backend
+    restart: unless-stopped
+
+    environment:
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: task_manager
+      FRONTEND_URL: http://localhost:3001
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: task-manager-frontend
+    restart: unless-stopped
+
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+
+    ports:
+      - "3001:3000"
+
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
