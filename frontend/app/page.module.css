@@ -1,0 +1,55 @@
+.page {
+  min-height: 100vh;
+  padding: 48px 20px;
+  background-color: #f3f4f6;
+}
+
+.container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.pageHeader {
+  margin-bottom: 32px;
+}
+
+.pageHeader h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.pageHeader p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.errorMessage {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #991b1b;
+  background-color: #fef2f2;
+}
+
+.tasksSection {
+  margin-top: 32px;
+}
+
+.tasksSection > h2 {
+  margin: 0 0 16px;
+  color: #1f2937;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 24px 16px;
+  }
+
+  .pageHeader h1 {
+    font-size: 1.7rem;
+  }
+}
